@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
 export class CompanyListComponent implements OnInit {
   companies$!: Observable<Company[]>;
 
-  constructor(private readonly companyService: CompanyService) {}
+  constructor(public companyService: CompanyService) {}
 
   ngOnInit(): void {
     this.getCompanies();
@@ -21,10 +21,9 @@ export class CompanyListComponent implements OnInit {
     this.companies$ = this.companyService.getCompanies();
   }
 
-  deleteCompany(companyId: number) {
-    this.companyService.deleteCompany(companyId).subscribe((x) => {
+  deleteCompany(company: Company) {
+    this.companyService.deleteCompany(company.id).subscribe((x) => {
       console.log('company deleted', x);
-      this.getCompanies();
     });
   }
 }
