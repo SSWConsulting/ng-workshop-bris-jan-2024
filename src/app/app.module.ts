@@ -1,5 +1,8 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
+import { NgModule, isDevMode } from '@angular/core';
+import {
+  BrowserModule,
+  provideClientHydration,
+} from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -9,13 +12,18 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClientModule } from '@angular/common/http';
 import { CompanyTableComponent } from './company/company-table/company-table.component';
 import { CompanyEditComponent } from './company/company-edit/company-edit.component';
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
+import { companyReducer } from './+store/reducers/company.reducer';
+import { CompanyEffects } from './+store/effects/company.effects';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 @NgModule({
   declarations: [
     AppComponent,
     CompanyListComponent,
     CompanyTableComponent,
-    CompanyEditComponent
+    CompanyEditComponent,
   ],
   imports: [
     BrowserModule,
@@ -23,11 +31,20 @@ import { CompanyEditComponent } from './company/company-edit/company-edit.compon
     FormsModule,
     ReactiveFormsModule,
     AppRoutingModule,
-    NgbModule
+    NgbModule,
+    StoreModule.forRoot(
+      {
+        companies: companyReducer,
+      },
+      {}
+    ),
+    EffectsModule.forRoot([CompanyEffects]),
+    StoreDevtoolsModule.instrument({
+      maxAge: 25,
+      logOnly: !isDevMode()
+    }),
   ],
-  providers: [
-    provideClientHydration()
-  ],
-  bootstrap: [AppComponent]
+  providers: [provideClientHydration()],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

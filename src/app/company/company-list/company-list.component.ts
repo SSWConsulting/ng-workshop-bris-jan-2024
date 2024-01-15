@@ -2,6 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { Company } from '../company';
 import { CompanyService } from '../company.service';
 import { Observable } from 'rxjs';
+import { AppState } from '../../models/appState';
+import { Store } from '@ngrx/store';
+import { selectCompanies } from '../../+store/selectors/company.selectors';
+import { deleteCompany, loadCompanies } from '../../+store/actions/company.actions';
 
 @Component({
   selector: 'fbc-company-list',
@@ -9,21 +13,17 @@ import { Observable } from 'rxjs';
   styleUrl: './company-list.component.scss',
 })
 export class CompanyListComponent implements OnInit {
-  companies$!: Observable<Company[]>;
+  companies$ = this.store.select(selectCompanies);
 
-  constructor(public companyService: CompanyService) {}
+  constructor(
+    private store: Store<AppState>,
+  ) {}
 
   ngOnInit(): void {
-    this.getCompanies();
-  }
-
-  getCompanies() {
-    this.companies$ = this.companyService.getCompanies();
+    this.store.dispatch(loadCompanies());
   }
 
   deleteCompany(company: Company) {
-    this.companyService.deleteCompany(company.id).subscribe((x) => {
-      console.log('company deleted', x);
-    });
+    this.store.dispatch(deleteCompany(company));
   }
 }

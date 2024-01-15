@@ -10,14 +10,12 @@ import { catchError, tap } from 'rxjs/operators';
 export class CompanyService {
   API_BASE = 'https://app-fbc-crm-api-prod.azurewebsites.net/api';
 
-  companies$ = new BehaviorSubject<Company[]>([]);
-
-  constructor(private readonly httpClient: HttpClient) {
-    this.loadCompanies();
-  }
+  constructor(private readonly httpClient: HttpClient) {}
 
   getCompanies(): Observable<Company[]> {
-    return this.companies$;
+    return this.httpClient
+      .get<Company[]>(`${this.API_BASE}/company`)
+      .pipe(catchError(this.errorHandler<Company[]>));
   }
 
   getCompany(companyId: number): Observable<Company> {
@@ -29,35 +27,19 @@ export class CompanyService {
   addCompany(company: Company): Observable<Company> {
     return this.httpClient
       .post<Company>(`${this.API_BASE}/company`, company)
-      .pipe(
-        catchError(this.errorHandler<Company>),
-        tap(() => this.loadCompanies())
-      );
+      .pipe(catchError(this.errorHandler<Company>));
   }
 
   updateCompany(company: Company): Observable<Company> {
     return this.httpClient
       .put<Company>(`${this.API_BASE}/company/${company.id}`, company)
-      .pipe(
-        catchError(this.errorHandler<Company>),
-        tap(() => this.loadCompanies())
-      );
+      .pipe(catchError(this.errorHandler<Company>));
   }
 
   deleteCompany(companyId: number): Observable<Company> {
     return this.httpClient
       .delete<Company>(`${this.API_BASE}/company/${companyId}`)
-      .pipe(
-        catchError(this.errorHandler<Company>),
-        tap(() => this.loadCompanies())
-      );
-  }
-
-  private loadCompanies(): void {
-    this.httpClient
-      .get<Company[]>(`${this.API_BASE}/company`)
-      .pipe(catchError(this.errorHandler<Company[]>))
-      .subscribe((c) => this.companies$.next(c));
+      .pipe(catchError(this.errorHandler<Company>));
   }
 
   private errorHandler<T>(error: Error): Observable<T> {

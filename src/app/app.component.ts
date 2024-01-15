@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { CompanyService } from './company/company.service';
-import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { AppState } from './models/appState';
+import { selectCompanyCount } from './+store/selectors/company.selectors';
 
 @Component({
   selector: 'fbc-root',
@@ -13,11 +14,9 @@ export class AppComponent implements OnInit {
 
   companyCount$!: Observable<number>;
 
-  constructor(private readonly companyService: CompanyService) {}
+  constructor(private readonly store: Store<AppState>) {}
 
   ngOnInit(): void {
-    this.companyCount$ = this.companyService
-      .getCompanies()
-      .pipe(map((c) => c.length));
+    this.companyCount$ = this.store.select(selectCompanyCount);
   }
 }
