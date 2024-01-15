@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { AppState } from './models/appState';
 import { selectCompanyCount } from './+store/selectors/company.selectors';
+import { environment } from '../environments/environment';
 
 @Component({
   selector: 'fbc-root',
@@ -11,6 +12,7 @@ import { selectCompanyCount } from './+store/selectors/company.selectors';
 })
 export class AppComponent implements OnInit {
   title = 'firebootcamp-crm';
+  isProduction = environment.isProduction;
 
   companyCount$!: Observable<number>;
 
