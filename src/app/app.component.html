@@ -1,4 +1,14 @@
-<div class="container">
-  <fbc-company-list></fbc-company-list>
-</div>
+<nav class="navbar navbar-light bg-faded">
+  <div class="container-fluid">
+    <a class="navbar-brand">FireBootCamp CRM</a>
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item" [routerLinkActive]="'active'">
+        <a class="nav-link" [routerLink]="['/company/list']">Companies</a>
+      </li>
+    </ul>
+  </div>
+</nav>
 
+<div class="container">
+  <router-outlet></router-outlet>
+</div>
