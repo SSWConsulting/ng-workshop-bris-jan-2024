@@ -1,18 +1,25 @@
 import { Injectable } from '@angular/core';
 import { Company } from './company';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CompanyService {
+  API_BASE = 'https://app-fbc-crm-api-prod.azurewebsites.net/api';
 
-  constructor() { }
+  constructor(private readonly httpClient: HttpClient) {}
 
-  getCompanies(): Company[] {
-    return [
-      { name: 'Company 1', email: 'Email 1', phone: 111 },
-      { name: 'Company 2', email: 'Email 2', phone: 222 },
-      { name: 'Company 3', email: 'Email 3', phone: 333 },
-    ];
+  getCompanies(): Observable<Company[]> {
+    return this.httpClient
+      .get<Company[]>(`${this.API_BASE}/coompany`)
+      .pipe(catchError(this.errorHandler));
+  }
+
+  errorHandler(error: Error): Observable<Company[]> {
+    console.error('implement custom error handler here', error);
+    return new Observable<Company[]>();
   }
 }

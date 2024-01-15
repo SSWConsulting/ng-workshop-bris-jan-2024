@@ -19,7 +19,7 @@ export class CompanyListComponent implements OnInit{
   }
 
   getCompanies() {
-    this.companies = this.companyService.getCompanies();
+    this.companyService.getCompanies().subscribe(companies => this.companies = companies);
   }
 
 }
