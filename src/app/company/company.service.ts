@@ -14,7 +14,7 @@ export class CompanyService {
 
   getCompanies(): Observable<Company[]> {
     return this.httpClient
-      .get<Company[]>(`${this.API_BASE}/coompany`)
+      .get<Company[]>(`${this.API_BASE}/company`)
       .pipe(catchError(this.errorHandler));
   }
 

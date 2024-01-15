@@ -5,21 +5,20 @@ import { CompanyService } from '../company.service';
 @Component({
   selector: 'fbc-company-list',
   templateUrl: './company-list.component.html',
-  styleUrl: './company-list.component.scss'
+  styleUrl: './company-list.component.scss',
 })
-export class CompanyListComponent implements OnInit{
+export class CompanyListComponent implements OnInit {
   companies!: Company[];
 
-  constructor(
-    private readonly companyService: CompanyService,
-  ){}
+  constructor(private readonly companyService: CompanyService) {}
 
   ngOnInit(): void {
     this.getCompanies();
   }
 
   getCompanies() {
-    this.companyService.getCompanies().subscribe(companies => this.companies = companies);
+    this.companyService
+      .getCompanies()
+      .subscribe((companies) => (this.companies = companies));
   }
-
 }
